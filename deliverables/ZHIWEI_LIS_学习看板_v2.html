@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZHIWEI · 知微 Learning Intelligence System</title>
+<style>
+:root{
+  --bg:#05060D;--bg-2:#080A14;--line:rgba(255,255,255,.09);--line-soft:rgba(255,255,255,.055);
+  --txt:#EDEFF7;--txt-2:#9AA1B8;--txt-3:#646B84;--purple:#8B5CF6;--purple-hi:#A78BFA;
+  --ice:#6FE3FF;--coral:#FF6B5E;--r:10px;--maxw:1180px;--gut:clamp(24px,5vw,72px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:"Inter","SF Pro Display",-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6;letter-spacing:.01em;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(900px 620px at 78% -12%,rgba(139,92,246,.20),transparent 62%),radial-gradient(760px 520px at 6% 8%,rgba(111,227,255,.09),transparent 60%),radial-gradient(1000px 700px at 50% 118%,rgba(139,92,246,.10),transparent 65%)}
+.wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+.topbar{position:sticky;top:0;z-index:20;backdrop-filter:blur(18px) saturate(140%);background:rgba(5,6,13,.72);border-bottom:1px solid var(--line-soft)}
+.topbar-in{max-width:var(--maxw);margin:0 auto;padding:16px var(--gut);display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:baseline;gap:12px}
+.brand-mark{font-weight:650;font-size:15px;letter-spacing:.22em;color:var(--txt)}
+.brand-sub{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--txt-3)}
+.nav{display:flex;gap:30px}
+.nav a{font-size:12.5px;color:var(--txt-2);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+.nav a:hover{color:var(--purple-hi)}
+@media(max-width:820px){.nav{display:none}}
+.hero{padding:clamp(72px,12vh,150px) 0 clamp(56px,8vh,96px)}
+.eyebrow{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--purple-hi);margin-bottom:34px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,var(--purple),transparent)}
+h1{font-size:clamp(38px,6.4vw,76px);line-height:1.06;font-weight:640;letter-spacing:-.028em;max-width:15em}
+h1 .accent{background:linear-gradient(96deg,var(--purple-hi),var(--ice));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-note{margin-top:34px;max-width:44ch;color:var(--txt-2);font-size:15.5px;line-height:1.75}
+.metrics{margin-top:clamp(56px,8vh,92px);display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.metric{padding:34px 30px 30px 0;position:relative}
+.metric+.metric{padding-left:34px;border-left:1px solid var(--line-soft)}
+.metric .num{font-size:clamp(44px,5.4vw,68px);font-weight:600;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.metric:nth-child(2) .num{color:var(--ice)}
+.metric:nth-child(4) .num{color:var(--purple-hi)}
+.metric .lbl{margin-top:16px;font-size:13px;color:var(--txt-2);letter-spacing:.02em}
+@media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}.metric{padding:28px 20px 24px 0}.metric:nth-child(3){border-left:0;padding-left:0}.metric:nth-child(3),.metric:nth-child(4){border-top:1px solid var(--line-soft)}.metric:nth-child(4){padding-left:20px}}
+section{padding:clamp(64px,10vh,120px) 0;border-top:1px solid var(--line-soft)}
+.sec-head{display:grid;grid-template-columns:220px 1fr;gap:40px;margin-bottom:clamp(40px,6vh,64px)}
+.sec-idx{font-size:11.5px;letter-spacing:.24em;color:var(--txt-3);text-transform:uppercase;padding-top:9px}
+.sec-title{font-size:clamp(25px,3.1vw,36px);font-weight:600;letter-spacing:-.018em;line-height:1.25}
+.sec-desc{margin-top:14px;color:var(--txt-2);font-size:14.5px;max-width:56ch}
+@media(max-width:820px){.sec-head{grid-template-columns:1fr;gap:14px}}
+.rows{border-top:1px solid var(--line-soft)}
+.row{display:grid;grid-template-columns:96px 1fr 210px 92px;align-items:center;gap:24px;padding:19px 0;border-bottom:1px solid var(--line-soft);transition:background .2s}
+.row:hover{background:rgba(255,255,255,.017)}
+.row .cid{font-size:12.5px;color:var(--txt-3);letter-spacing:.1em;font-variant-numeric:tabular-nums}
+.row .cname{font-size:14.5px;color:var(--txt)}
+.bar{height:2px;background:rgba(255,255,255,.1);position:relative;border-radius:2px;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:2px;background:linear-gradient(90deg,var(--purple),var(--ice))}
+.row.weak .bar i{background:linear-gradient(90deg,rgba(255,107,94,.55),var(--coral))}
+.row .score{font-size:12.5px;color:var(--txt-2);text-align:right;font-variant-numeric:tabular-nums}
+.row .score.weak{color:var(--coral)}
+@media(max-width:820px){.row{grid-template-columns:74px 1fr 60px;gap:14px}.row .bar{display:none}}
+.path{padding:clamp(44px,7vh,72px) 0;display:flex;align-items:center;justify-content:space-between;gap:clamp(6px,2vw,26px);position:relative}
+.path-line{position:absolute;left:6%;right:6%;top:50%;height:1px;z-index:0;background:linear-gradient(90deg,transparent,rgba(139,92,246,.55) 14%,rgba(111,227,255,.7) 50%,rgba(255,107,94,.65) 86%,transparent)}
+.path-line::after{content:"";position:absolute;top:-2px;left:0;width:5px;height:5px;border-radius:50%;background:var(--ice);box-shadow:0 0 12px 2px rgba(111,227,255,.85);animation:flow 6.5s linear infinite}
+@keyframes flow{0%{left:0;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:100%;opacity:0}}
+.node{position:relative;z-index:2;flex:1;text-align:center;cursor:pointer;padding:26px 10px;border-radius:var(--r);transition:transform .25s,background .25s}
+.node:hover{background:rgba(255,255,255,.028)}
+.dot{width:13px;height:13px;border-radius:50%;margin:0 auto 22px;border:1.5px solid var(--purple-hi);background:var(--bg);transition:all .28s}
+.node[data-state="weak"] .dot{border-color:var(--coral);background:var(--coral);box-shadow:0 0 0 5px rgba(255,107,94,.13)}
+.node[data-state="pre"] .dot{border-color:rgba(167,139,250,.55);background:rgba(167,139,250,.2)}
+.node.active .dot{box-shadow:0 0 0 6px rgba(139,92,246,.22),0 0 22px 2px rgba(139,92,246,.5);background:var(--purple-hi);border-color:var(--purple-hi)}
+.node .nid{font-size:11px;letter-spacing:.18em;color:var(--txt-3);text-transform:uppercase}
+.node .ntitle{margin-top:10px;font-size:14.5px;color:var(--txt);line-height:1.45;font-weight:500}
+.node .nmeta{margin-top:8px;font-size:11.5px;color:var(--txt-3);font-variant-numeric:tabular-nums}
+.node[data-state="weak"] .nmeta{color:var(--coral)}
+@media(max-width:760px){.path{flex-direction:column;gap:0}.path-line{left:50%;top:8%;bottom:8%;right:auto;width:1px;height:auto;background:linear-gradient(180deg,transparent,rgba(167,139,250,.5),rgba(255,107,94,.6),transparent)}.path-line::after{display:none}.node{width:100%}}
+.path-detail{margin-top:8px;border-top:1px solid var(--line-soft);padding-top:30px;display:grid;grid-template-columns:150px 1fr;gap:30px;min-height:96px}
+.path-detail .pd-k{font-size:11.5px;letter-spacing:.18em;color:var(--txt-3);text-transform:uppercase;padding-top:4px}
+.path-detail .pd-v{font-size:14.5px;color:var(--txt-2);line-height:1.8;max-width:62ch}
+.path-detail .pd-v b{color:var(--txt);font-weight:550}
+@media(max-width:760px){.path-detail{grid-template-columns:1fr;gap:12px}}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:20px}
+.flip{perspective:1400px;height:236px;cursor:pointer}
+.flip-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .68s cubic-bezier(.4,.16,.2,1)}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid var(--line);border-radius:var(--r);padding:26px 24px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(168deg,rgba(255,255,255,.035),rgba(255,255,255,.008))}
+.face.back{transform:rotateY(180deg);border-color:rgba(139,92,246,.4);background:linear-gradient(168deg,rgba(139,92,246,.10),rgba(111,227,255,.035))}
+.face .tag{font-size:10.5px;letter-spacing:.2em;color:var(--txt-3);text-transform:uppercase}
+.face .q{font-size:15.5px;line-height:1.62;color:var(--txt);font-weight:500}
+.face .a{font-size:13.5px;line-height:1.8;color:var(--txt-2)}
+.face .a b{color:var(--ice);font-weight:550}
+.face .a em{color:var(--coral);font-style:normal}
+.face .hint{font-size:11px;color:var(--txt-3);letter-spacing:.06em}
+.quiz{border-top:1px solid var(--line-soft)}
+.q{padding:34px 0;border-bottom:1px solid var(--line-soft)}
+.q-head{display:flex;gap:18px;align-items:baseline;margin-bottom:20px}
+.q-no{font-size:11.5px;color:var(--txt-3);letter-spacing:.16em;font-variant-numeric:tabular-nums;min-width:34px}
+.q-txt{font-size:15.5px;color:var(--txt);line-height:1.65;font-weight:500}
+.opts{display:grid;gap:9px;margin-left:52px;max-width:760px}
+@media(max-width:640px){.opts{margin-left:0}}
+.opt{text-align:left;width:100%;cursor:pointer;padding:14px 18px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.014);color:var(--txt-2);font-size:13.8px;font-family:inherit;line-height:1.55;transition:border-color .18s,background .18s,color .18s}
+.opt:hover:not(.done){border-color:rgba(139,92,246,.5);background:rgba(139,92,246,.07);color:var(--txt)}
+.opt.done{cursor:default}
+.opt.right{border-color:rgba(111,227,255,.6);background:rgba(111,227,255,.09);color:var(--ice)}
+.opt.wrong{border-color:rgba(255,107,94,.55);background:rgba(255,107,94,.08);color:var(--coral)}
+.opt.dim{opacity:.4}
+.exp{margin:16px 0 0 52px;max-width:760px;font-size:13.2px;line-height:1.78;color:var(--txt-2);border-left:1px solid rgba(139,92,246,.45);padding-left:16px;display:none}
+@media(max-width:640px){.exp{margin-left:0}}
+.exp.show{display:block}
+.exp b{color:var(--txt);font-weight:550}
+.quiz-status{display:flex;align-items:baseline;gap:20px;flex-wrap:wrap;padding:26px 0 4px;font-size:13px;color:var(--txt-2)}
+.quiz-status .big{font-size:26px;color:var(--txt);font-weight:600;font-variant-numeric:tabular-nums}
+.quiz-status .verdict{color:var(--purple-hi)}
+.tl{position:relative;padding-left:34px;border-left:1px solid rgba(139,92,246,.28)}
+.tl-item{position:relative;padding:0 0 40px 0;cursor:pointer}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:-39px;top:7px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1.5px solid var(--purple-hi);transition:all .25s}
+.tl-item.now::before{background:var(--coral);border-color:var(--coral);box-shadow:0 0 0 5px rgba(255,107,94,.14)}
+.tl-item.open::before{background:var(--purple-hi);box-shadow:0 0 0 5px rgba(139,92,246,.18)}
+.tl-when{font-size:11.5px;letter-spacing:.16em;color:var(--txt-3);text-transform:uppercase;font-variant-numeric:tabular-nums}
+.tl-item.now .tl-when{color:var(--coral)}
+.tl-what{margin-top:8px;font-size:15px;color:var(--txt);font-weight:500}
+.tl-body{margin-top:14px;font-size:13.3px;line-height:1.8;color:var(--txt-2);max-height:0;overflow:hidden;transition:max-height .4s ease,opacity .3s;opacity:0}
+.tl-item.open .tl-body{max-height:280px;opacity:1;margin-top:16px}
+.tl-body b{color:var(--txt);font-weight:550}
+.evidence{border-top:1px solid var(--line);padding:44px 0 64px;font-size:11.5px;line-height:1.95;color:var(--txt-3)}
+.evidence .ev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:26px 40px}
+.evidence h4{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--txt-2);margin-bottom:9px;font-weight:600}
+.evidence .warn{color:#8C8478}
+.evidence .warn b{color:#C9A87C;font-weight:550}
+.ev-foot{margin-top:34px;padding-top:20px;border-top:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--txt-3)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><span class="brand-mark">ZHIWEI</span><span class="brand-sub">Learning Intelligence System</span></div>
+    <nav class="nav">
+      <a href="#status">状态</a><a href="#path">主线</a><a href="#feynman">费曼</a><a href="#quiz">微测验</a><a href="#timeline">复习</a>
+    </nav>
+  </div>
+</div>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Diagnostic Snapshot · 2026.11.12</div>
+    <h1>把薄弱点<br>变成<span class="accent">下一次掌握</span></h1>
+    <p class="hero-note">一次微诊断，一条学习主线，三个复习节点。系统只做一件事：让每个卡点都有明确的下一次。</p>
+    <div class="metrics">
+      <div class="metric"><div class="num">7</div><div class="lbl">个待复习概念</div></div>
+      <div class="metric"><div class="num">4</div><div class="lbl">类错因</div></div>
+      <div class="metric"><div class="num">3</div><div class="lbl">个复习节点</div></div>
+      <div class="metric"><div class="num">1</div><div class="lbl">条当前学习主线</div></div>
+    </div>
+  </header>
+
+  <section id="status">
+    <div class="sec-head">
+      <div class="sec-idx">01 / Status</div>
+      <div><h2 class="sec-title">当前学习状态总览</h2>
+      <p class="sec-desc">掌握度低于 60 的概念进入今日复习队列，以珊瑚红标记。</p></div>
+    </div>
+    <div class="rows" id="rows"></div>
+  </section>
+
+  <section id="path">
+    <div class="sec-head">
+      <div class="sec-idx">02 / Main Thread</div>
+      <div><h2 class="sec-title">当前学习主线</h2>
+      <p class="sec-desc">今天所有薄弱点收敛为一条因果链。点击节点查看卡点。</p></div>
+    </div>
+    <div class="path">
+      <div class="path-line"></div>
+      <div class="node" data-state="pre" data-k="前置概念" data-v="<b>反向传播 · 链式连乘</b><br>梯度由各层连乘因子累积。因子整体小于 1 则逐层衰减，大于 1 则逐层放大——消失与爆炸是同一机制的两个方向。">
+        <div class="dot"></div><div class="nid">Prerequisite</div>
+        <div class="ntitle">反向传播<br>链式连乘</div><div class="nmeta">前置依赖</div>
+      </div>
+      <div class="node active" data-state="weak" data-k="卡点一" data-v="<b>ML-03 梯度消失与残差连接</b> · 掌握度 40 · 前置缺失<br>缺的不是定义，而是「连乘」这一层图像。残差连接 y = x + F(x) 的 dy/dx = 1 + F'(x)，那个 1 提供恒等通路，使梯度不再层层衰减。">
+        <div class="dot"></div><div class="nid">ML-03</div>
+        <div class="ntitle">梯度消失<br>与残差连接</div><div class="nmeta">40 · 前置缺失</div>
+      </div>
+      <div class="node" data-state="weak" data-k="卡点二" data-v="<b>ML-05 自注意力缩放点积</b> · 掌握度 48 · 推导跳跃<br>√d_k 除的是 softmax 之前的 QKᵀ 打分矩阵，不是输出向量。目的是稳住 logits 的方差，避免 softmax 进入饱和区、梯度趋零——与 ML-03 同属「梯度趋零」主线。">
+        <div class="dot"></div><div class="nid">ML-05</div>
+        <div class="ntitle">自注意力<br>缩放点积</div><div class="nmeta">48 · 推导跳跃</div>
+      </div>
+    </div>
+    <div class="path-detail">
+      <div class="pd-k" id="pd-k">卡点一</div>
+      <div class="pd-v" id="pd-v">ML-03 梯度消失与残差连接 · 掌握度 40 · 前置缺失。缺的不是定义，而是「连乘」这一层图像。</div>
+    </div>
+  </section>
+
+  <section id="feynman">
+    <div class="sec-head">
+      <div class="sec-idx">03 / Feynman</div>
+      <div><h2 class="sec-title">费曼挑战</h2>
+      <p class="sec-desc">用大白话讲清一个机制。翻面看核心直觉与反例。</p></div>
+    </div>
+    <div class="cards">
+      <div class="flip"><div class="flip-in">
+        <div class="face"><div class="tag">ML-03 · 前置</div><div class="q">为什么梯度消失和梯度爆炸不是两种病？</div><div class="hint">点击翻面</div></div>
+        <div class="face back"><div class="tag">核心直觉</div><div class="a">梯度是<b>逐层连乘</b>出来的。因子整体 &lt; 1 → 衰减趋零；&gt; 1 → 放大爆炸。同一机制的两个方向。<br><em>反例：</em>把二者当成独立故障分别背解法。</div></div>
+      </div></div>
+      <div class="flip"><div class="flip-in">
+        <div class="face"><div class="tag">ML-03 · 残差</div><div class="q">残差连接到底解决了什么？</div><div class="hint">点击翻面</div></div>
+        <div class="face back"><div class="tag">因果链</div><div class="a">y = x + F(x) → dy/dx = <b>1</b> + F'(x)。那个 1 是恒等通路，连乘因子不会衰减到 0，深层网络可训练。<br><em>注意：</em>治爆炸的主力是梯度裁剪，不是残差。</div></div>
+      </div></div>
+      <div class="flip"><div class="flip-in">
+        <div class="face"><div class="tag">ML-05 · 缩放</div><div class="q">√d_k 除的是哪一项？</div><div class="hint">点击翻面</div></div>
+        <div class="face back"><div class="tag">易错点</div><div class="a">除的是 softmax 前的 <b>QKᵀ logits</b>，不是输出向量。点积方差随 d_k 线性增长，故用 √d_k 抵消。<br><em>反例：</em>「让输出向量模长为 1」——softmax 行和已为 1，与缩放无关。</div></div>
+      </div></div>
+      <div class="flip"><div class="flip-in">
+        <div class="face"><div class="tag">ML-04 · 归一化</div><div class="q">LayerNorm 与 BatchNorm 的分界在哪？</div><div class="hint">点击翻面</div></div>
+        <div class="face back"><div class="tag">区分点</div><div class="a">BatchNorm 沿<b>批次维</b>统计，依赖 batch 大小；LayerNorm 沿<b>特征维</b>统计，逐样本独立，适合变长序列。<br><em>反例：</em>在小 batch 或推理时混用二者。</div></div>
+      </div></div>
+      <div class="flip"><div class="flip-in">
+        <div class="face"><div class="tag">DS-01 · 复杂度</div><div class="q">摊还复杂度等于平均复杂度吗？</div><div class="hint">点击翻面</div></div>
+        <div class="face back"><div class="tag">区分点</div><div class="a">摊还是<b>最坏序列的总代价分摊到每次操作</b>，有保证；平均是对输入分布取期望，无保证。<br><em>反例：</em>用平均复杂度替代摊还下结论。</div></div>
+      </div></div>
+      <div class="flip"><div class="flip-in">
+        <div class="face"><div class="tag">DS-05 · 边界</div><div class="q">什么时候贪心失效、必须动态规划？</div><div class="hint">点击翻面</div></div>
+        <div class="face back"><div class="tag">判据</div><div class="a">看<b>最优子结构 + 无后效性</b>是否成立，以及贪心选择性质能否证明。局部最优无法推出全局最优时，贪心失效。<br><em>反例：</em>0/1 背包用单位价值贪心。</div></div>
+      </div></div>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="sec-head">
+      <div class="sec-idx">04 / Quiz</div>
+      <div><h2 class="sec-title">微测验</h2>
+      <p class="sec-desc">六道题对准今日薄弱点。点击选项即时判分并给出错因解析。</p></div>
+    </div>
+    <div class="quiz" id="quizBox"></div>
+    <div class="quiz-status">
+      <span>正确 <span class="big" id="score">0</span> / 6</span>
+      <span class="verdict" id="verdict">作答后显示复习建议</span>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <div class="sec-head">
+      <div class="sec-idx">05 / Schedule</div>
+      <div><h2 class="sec-title">艾宾浩斯复习时间线</h2>
+      <p class="sec-desc">首次掌握 +1 天、巩固 +3 天、熟练 +7 天。点击节点展开当日任务。</p></div>
+    </div>
+    <div class="tl">
+      <div class="tl-item now open">
+        <div class="tl-when">2026.11.12 · 今日 19:00</div>
+        <div class="tl-what">当日重测 · ML-03 / ML-05</div>
+        <div class="tl-body">未达标不放行。重做主线三节点与本题微测验，正确率 ≥ 5/6 视为打通「梯度趋零」主线。<b>前置缺失</b>型卡点必须当日闭环。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">2026.11.13 · +1 天</div>
+        <div class="tl-what">首次掌握档 · ML-04 / DS-01</div>
+        <div class="tl-body">LayerNorm 与 BatchNorm 的统计维度差异；摊还复杂度与平均复杂度的保证性差异。<b>概念不清</b>型卡点以对比表复述验收。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">2026.11.15 · +3 天</div>
+        <div class="tl-what">巩固档 · ML-03 / ML-05 复测</div>
+        <div class="tl-body">脱离提示重述残差因果链与 √d_k 作用对象。连续两次达标则升入 +7 天熟练档，并更新掌握度。</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="evidence">
+    <div class="ev-grid">
+      <div><h4>Version</h4>ZHIWEI LIS · Board v2.0<br>Design system: Deep Night / Electric Purple / Ice Blue</div>
+      <div><h4>Generated</h4>2026-11-12 12:02 (UTC+8)<br>Single-file HTML5 · self-contained</div>
+      <div><h4>Data Sources</h4>ZhiWei_学习记录表（学号 2528404005，10 条记录）<br>知微_核心术语库（标准定义对齐）<br>ZhiWei_课程知识库（本轮检索返回 0 条）</div>
+      <div><h4>Evidence Notes</h4><span class="warn">本页为<b>诊断快照</b>，测验结果尚未自动写回 EPAI 数据库；掌握度数值为生成时刻原值，非实时。<br>课程知识库本轮检索返回 0 条，概念正文依据专业术语库标准定义与学科原理构建，未引用课程卡片原文。<br>页面不构成学习效果承诺。</span></div>
+    </div>
+    <div class="ev-foot"><span>ZHIWEI · 知微 Learning Intelligence System</span><span>见微知著 · Micro-concept Diagnosis</span></div>
+  </footer>
+</div>
+<script>
+var CONCEPTS=[
+ {id:"ML-03",name:"梯度消失与残差连接",s:40,e:"前置缺失",d:"2026-11-12 16:00"},
+ {id:"ML-02",name:"经验风险与结构风险",s:55,e:"概念不清",d:"2026-11-12 10:30"},
+ {id:"DS-01",name:"摊还时间复杂度",s:45,e:"概念不清",d:"2026-11-12 11:00"},
+ {id:"DS-03",name:"拓扑排序与环检测",s:52,e:"审题偏差",d:"2026-11-12 18:00"},
+ {id:"ML-05",name:"自注意力缩放点积",s:48,e:"推导跳跃",d:"2026-11-12 19:00"},
+ {id:"ML-04",name:"LayerNorm与BatchNorm",s:60,e:"概念不清",d:"2026-11-12 20:00"},
+ {id:"DS-05",name:"动态规划与贪心边界",s:38,e:"推导跳跃",d:"2026-11-12 21:00"}
+];
+document.getElementById('rows').innerHTML=CONCEPTS.map(function(c){
+  var w=c.s<60;
+  return '<div class="row'+(w?' weak':'')+'"><div class="cid">'+c.id+'</div><div class="cname">'+c.name+'</div><div class="bar"><i style="width:'+c.s+'%"></i></div><div class="score'+(w?' weak':'')+'">'+c.s+' · '+c.e+'</div></div>';
+}).join('');
+
+var nodes=document.querySelectorAll('.node'),pdK=document.getElementById('pd-k'),pdV=document.getElementById('pd-v');
+nodes.forEach(function(n){
+  n.addEventListener('click',function(){
+    nodes.forEach(function(x){x.classList.remove('active')});
+    n.classList.add('active');
+    pdK.textContent=n.dataset.k;pdV.innerHTML=n.dataset.v;
+  });
+});
+document.querySelectorAll('.flip').forEach(function(f){
+  f.addEventListener('click',function(){f.classList.toggle('on')});
+});
+
+var QS=[
+ {q:"深层网络中梯度逐层连乘，若因子绝对值整体小于 1，主要后果是？",o:["浅层参数几乎不更新","参数更新步长爆炸","输出向量模长变为 1","softmax 行和不再为 1"],a:0,e:"<b>梯度消失</b>：连乘因子 <1 时梯度指数衰减趋零，浅层几乎不更新。爆炸对应因子 >1。"},
+ {q:"残差连接 y = x + F(x) 缓解梯度消失的关键在于？",o:["把每层输出归一化到同一尺度","dy/dx = 1 + F'(x) 中的恒等项 1 提供不衰减通路","减小了每层的参数量","把 Sigmoid 换成 ReLU"],a:1,e:"恒等通路的 <b>1</b> 保证连乘因子不会衰减到 0，这是残差缓解消失的机制；治爆炸主力是梯度裁剪。"},
+ {q:"自注意力中除以 √d_k 的作用对象是？",o:["softmax 之后的输出向量","QKᵀ 打分矩阵（logits）","V 矩阵","位置编码"],a:1,e:"除的是 <b>softmax 前的 logits</b>。目的是稳住方差，避免 softmax 饱和导致梯度趋零；输出向量模长与它无关。"},
+ {q:"为什么用 √d_k 而不是 d_k？",o:["点积的方差随 d_k 线性增长","点积的方差随 d_k 的平方增长","因为 d_k 一定是完全平方数","为了让参数量减半"],a:0,e:"独立同分布分量点积的方差与 <b>d_k 成正比</b>，故除以 √d_k 使方差回到常数级。"},
+ {q:"LayerNorm 与 BatchNorm 的核心差异是？",o:["LayerNorm 沿批次维统计","BatchNorm 沿特征维统计","BatchNorm 沿批次维、LayerNorm 沿特征维","二者完全等价"],a:2,e:"BatchNorm 依赖 batch 大小；<b>LayerNorm 逐样本沿特征维</b>统计，适合变长序列与小 batch。"},
+ {q:"摊还复杂度与平均复杂度的区别是？",o:["两者是同一概念的不同叫法","摊还是最坏序列总代价的分摊且有保证，平均是对输入分布取期望","平均复杂度有保证，摊还没有","摊还只适用于递归算法"],a:1,e:"摊还给出<b>最坏情况下的分摊保证</b>；平均复杂度依赖输入分布假设，无保证。"}
+];
+var box=document.getElementById('quizBox');
+box.innerHTML=QS.map(function(item,i){
+  return '<div class="q"><div class="q-head"><span class="q-no">Q'+(i+1)+'</span><span class="q-txt">'+item.q+'</span></div><div class="opts">'
+  +item.o.map(function(t,j){return '<button class="opt" data-q="'+i+'" data-o="'+j+'">'+String.fromCharCode(65+j)+'&nbsp;&nbsp;'+t+'</button>'}).join('')
+  +'</div><div class="exp" id="exp'+i+'">'+item.e+'</div></div>';
+}).join('');
+
+var correct=0,answered=0;
+var scoreEl=document.getElementById('score'),verdictEl=document.getElementById('verdict');
+box.addEventListener('click',function(ev){
+  var btn=ev.target.closest('.opt');
+  if(!btn||btn.classList.contains('done'))return;
+  var qi=+btn.dataset.q,oi=+btn.dataset.o,item=QS[qi];
+  var group=btn.parentNode.querySelectorAll('.opt');
+  group.forEach(function(b){
+    b.classList.add('done');
+    var j=+b.dataset.o;
+    if(j===item.a)b.classList.add('right');
+    else if(j===oi)b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+  document.getElementById('exp'+qi).classList.add('show');
+  answered++;if(oi===item.a)correct++;
+  scoreEl.textContent=correct;
+  if(answered<QS.length){verdictEl.textContent='已完成 '+answered+' / '+QS.length+'，继续作答';verdictEl.style.color='var(--purple-hi)';}
+  else if(correct>=5){verdictEl.textContent='达标 · 主线打通，可顺延至 11.15 巩固档';verdictEl.style.color='var(--ice)';}
+  else if(correct>=3){verdictEl.textContent='半达标 · 建议 11.12 19:00 重测一次';verdictEl.style.color='var(--purple-hi)';}
+  else{verdictEl.textContent='未达标 · 回到主线三节点补前置';verdictEl.style.color='var(--coral)';}
+});
+document.querySelectorAll('.tl-item').forEach(function(it){
+  it.addEventListener('click',function(){
+    var wasOpen=it.classList.contains('open');
+    document.querySelectorAll('.tl-item').forEach(function(x){x.classList.remove('open')});
+    if(!wasOpen)it.classList.add('open');
+  });
+});
+</script>
+
+<script>
+const style = document.createElement('style');
+style.textContent = `
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    
+    .button-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+    
+    .edgeone-button {
+        display: flex;
+        align-items: center;
+        background: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 6px 20px 6px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .edgeone-button:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+    }
+    
+
+    
+    .close-button {
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        width: 14px;
+        height: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #888888;
+        font-size: 10px;
+        cursor: pointer;
+        opacity: 1;
+        z-index: 1001;
+    }
+`;
+
+document.head.appendChild(style);
+
+const buttonContainer = document.createElement('div');
+buttonContainer.className = 'button-container';
+
+const closeButton = document.createElement('div');
+closeButton.className = 'close-button';
+closeButton.textContent = '×';
+
+const edgeoneButton = document.createElement('button');
+edgeoneButton.className = 'edgeone-button';
+
+// 创建带有不同颜色的文本
+const useText = document.createElement('span');
+useText.textContent = '使用 ';
+useText.style.color = '#888888';
+
+const pageText = document.createElement('span');
+pageText.textContent = 'Pages';
+pageText.style.color = '#ffffff';
+pageText.style.marginLeft = '2px';
+pageText.style.marginRight = '2px';
+
+const deployText = document.createElement('span');
+deployText.textContent = ' 部署';
+deployText.style.color = '#888888';
+
+edgeoneButton.appendChild(useText);
+edgeoneButton.appendChild(pageText);
+edgeoneButton.appendChild(deployText);
+
+buttonContainer.appendChild(closeButton);
+buttonContainer.appendChild(edgeoneButton);
+
+document.body.appendChild(buttonContainer);
+
+closeButton.addEventListener('click', function (e) {
+  e.stopPropagation();
+  buttonContainer.style.display = 'none';
+});
+
+edgeoneButton.addEventListener('click', function () {
+  window.open('https://pages.edgeone.ai/zh/document/pages-mcp', '_blank');
+});
+
+(function loadGoogleAnalytics() {
+  const GA_ID = 'G-MBR88GEWNE';
+
+  if (!GA_ID) {
+    console.warn('Google Analytics ID is not defined');
+    return;
+  }
+
+  function createAnalyticsScripts() {
+    const script1 = document.createElement('script');
+    script1.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    script1.async = true;
+
+    const script2 = document.createElement('script');
+    script2.textContent =
+      'window.dataLayer = window.dataLayer || [];' +
+      'function gtag(){dataLayer.push(arguments);}' +
+      'gtag("js", new Date());' +
+      'gtag("config", "' +
+      GA_ID +
+      '");';
+
+    try {
+      document.head.appendChild(script1);
+      document.head.appendChild(script2);
+    } catch (err) {
+      console.error('Failed to load Google Analytics:', err);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', createAnalyticsScripts);
+  } else {
+    createAnalyticsScripts();
+  }
+})();
+
+
+</script>
+</body>
+</html>

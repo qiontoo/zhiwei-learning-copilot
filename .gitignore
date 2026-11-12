@@ -1,0 +1,8 @@
+.pptx_inspect/
+.codex-finalizer/
+.pptx_build/
+.chart-data-*/
+~$*.pptx
+*.tmp
+.DS_Store
+Thumbs.db
